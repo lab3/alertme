@@ -37,7 +37,7 @@ class app:
             self.sms.sendMessage(message, self.c["sms_from"], self.c["sms_to"])
 
     def run(self):
-        aio = gpio(self.zones, self.handleRead)
+        aio = gpio(list(self.zones.keys()), self.handleRead)
         aio.run()
 
 config = configparser.ConfigParser()

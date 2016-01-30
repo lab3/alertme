@@ -3,9 +3,9 @@ import time
 
 
 class gpio:
-    def __init__(self, zones, action):
+    def __init__(self, pins, action):
         io.setmode(io.BCM)
-        self.pins = list(zones.keys())
+        self.pins = pins
 
         for pin in self.pins:
             io.setup(pin, io.IN, pull_up_down=io.PUD_UP)

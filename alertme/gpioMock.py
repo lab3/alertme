@@ -2,9 +2,9 @@ import time
 
 
 class gpioMock:
-    def __init__(self, zones, action):
+    def __init__(self, pins, action):
         print("alertIOMock Init")
-        self.pins = list(zones.keys())
+        self.pins = pins
         self.action = action
 
     def run(self):
