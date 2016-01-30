@@ -4,7 +4,7 @@ alertme
 This project uses the GPIO pins on a raspberry pi to dectect the change in state of reed sensors that would normally be wired to a home alarm system.
 
 Once an open zone has been detected it will use the twilio rest api for sms notification.
-![raspberry pi](https://avatars0.githubusercontent.com/u/1294177?v=3&s=200)
+
 <table>
 <tr>
 <td>
