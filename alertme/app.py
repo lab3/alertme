@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 # Testing
-from gpioMock import gpioMock as gpio
-from twilioHelper import twilioHelperMock as twilioHelper
+#from gpioMock import gpioMock as gpio
+#from twilioHelper import twilioHelperMock as twilioHelper
 
 # Live
-# from twilioHelper import twilioHelper
-# from gpio import gpio
+from twilioHelper import twilioHelper
+from gpio import gpio
 from zone import zone
 import datetime
 import configparser
@@ -21,7 +21,9 @@ class app:
         self.sms = twilioHelper(self.c["twilio_sid"], self.c["twilio_token"])
 
     def handleRead(self, pin, isOpen):
+        #print("handleRead: " + str(pin) + " " + str(isOpen))
         zone = self.zones[pin]
+        #print("zone:" + str(zone.isOpen))
 
         if zone is not None:
             if(isOpen and not zone.isOpen):
@@ -37,15 +39,15 @@ class app:
             self.sms.sendMessage(message, self.c["sms_from"], self.c["sms_to"])
 
     def run(self):
-        aio = gpio(list(self.zones.keys()), self.handleRead)
+        aio = gpio(self.zones, self.handleRead)
         aio.run()
 
 config = configparser.ConfigParser()
 config.read_file(open('alertme.cfg'))
 
 zones = [
-    zone(23, "Back door"),
-    zone(24, "Front door")
+    zone(17, "Back door"),
+    zone(7, "Front door")
 ]
 
 app(config, zones).run()
