@@ -16,7 +16,7 @@ class twilioHelper:
 
 class twilioHelperMock:
     def __init__(self, sid, token):
-        None
+        print("twilioHelperMock Init")
 
     def sendMessage(self, message, from_, to):
         print("send:" + from_ + " -> " + to + " " + message)

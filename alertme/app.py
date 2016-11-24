@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 # Testing
-#from gpioMock import gpioMock as gpio
-#from twilioHelper import twilioHelperMock as twilioHelper
+from gpioMock import gpioMock as gpio
+from twilioHelper import twilioHelperMock as twilioHelper
 
 # Live
-from twilioHelper import twilioHelper
-from gpio import gpio
+#from twilioHelper import twilioHelper
+#from gpio import gpio
 from zone import zone
 import datetime
 import configparser
@@ -19,6 +19,7 @@ class app:
         self.on = datetime.time(int(self.c["on_hh"]), int(self.c["on_mm"]))
         self.off = datetime.time(int(self.c["off_hh"]), int(self.c["off_mm"]))
         self.sms = twilioHelper(self.c["twilio_sid"], self.c["twilio_token"])
+        self.duration_seconds = int(self.c["duration_seconds"])
 
     def handleRead(self, pin, isOpen):
         #print("handleRead: " + str(pin) + " " + str(isOpen))
@@ -27,10 +28,19 @@ class app:
 
         if zone is not None:
             if(isOpen and not zone.isOpen):
-                self.sendMessage(zone.name + " opened")
+                zone.when = datetime.datetime.now()
                 zone.isOpen = True
+                self.sendMessage(zone.name + " opened")
+            elif(isOpen and zone.isOpen):
+                diff = (datetime.datetime.now()-zone.when).total_seconds()
+                print("diff:" + str(diff))
+                if(diff > self.duration_seconds and not zone.durationTrigger):
+                    zone.durationTrigger = True
+                    self.sendMessage(zone.name + " was left open")
             elif(not isOpen and zone.isOpen):
+                zone.durationTrigger = False
                 zone.isOpen = False
+                self.sendMessage(zone.name + " was closed")
 
     def sendMessage(self, message):
         timenow = datetime.datetime.now().time()
