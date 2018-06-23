@@ -1,3 +1,5 @@
+import datetime
+import traceback
 from twilio.rest import TwilioRestClient
 
 
@@ -8,10 +10,17 @@ class twilioHelper:
         self.client = TwilioRestClient(self.ACCOUNT_SID, self.AUTH_TOKEN)
 
     def sendMessage(self, message, from_, to):
-        self.client.messages.create(
-            to=to,
-            from_=from_,
-            body=message)
+        print(str(datetime.datetime.now()) + " send " + from_ + " -> " + to + " " + message)
+
+        try:
+            self.client.messages.create(
+                to=to,
+                from_=from_,
+                body=message)
+            return True
+        except:
+            print(traceback.print_exc())
+            return False
 
 
 class twilioHelperMock:
@@ -19,4 +28,10 @@ class twilioHelperMock:
         print("twilioHelperMock Init")
 
     def sendMessage(self, message, from_, to):
-        print("send:" + from_ + " -> " + to + " " + message)
+        try:
+            print(str(datetime.datetime.now()) + " send " + from_ + " -> " + to + " " + message)
+            return True
+        except:
+            print(str(datetime.datetime.now()) + "send failed")
+            print(traceback.print_exc())
+            return False
