@@ -32,7 +32,8 @@ class app:
         # print("zone:" + str(zone.isOpen))
 
         if(not self.lastSendResult):
-            self.lastSendResult = self.sendMessage("failed sending message")
+            self.sendMessage("failed sending message")
+            self.lastSendResult = True
 
         if zone is not None:
             if(isOpen and not zone.isOpen):
