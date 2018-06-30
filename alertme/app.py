@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 # Testing
-from gpioMock import gpioMock as gpio
-from twilioHelper import twilioHelperMock as twilioHelper
+#from gpioMock import gpioMock as gpio
+#from twilioHelper import twilioHelperMock as twilioHelper
 
 # Live
-#from twilioHelper import twilioHelper
-# from gpio import gpio
+from twilioHelper import twilioHelper
+from gpio import gpio
 from zone import zone
 import datetime
 import configparser
@@ -55,7 +55,9 @@ class app:
         timenow = datetime.datetime.now().time()
 
         if(timenow > self.on or timenow <= self.off):
-            self.sms.sendMessage(message, self.c["sms_from"], self.c["sms_to"])
+            return self.sms.sendMessage(message, self.c["sms_from"], self.c["sms_to"])
+
+        return True
 
     def run(self):
         aio = gpio(self.zones, self.handleRead)
